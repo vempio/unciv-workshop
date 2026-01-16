@@ -98,6 +98,9 @@ class TurnManager(val civInfo: Civilization) {
             }
         }
 
+        // Workshop: Alien Invasion expansion - check for sightings each turn
+        civInfo.alienManager.checkForSighting(civInfo.gameInfo.turns)
+
         updateWinningCiv()
     }
 

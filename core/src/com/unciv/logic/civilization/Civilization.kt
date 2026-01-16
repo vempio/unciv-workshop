@@ -46,6 +46,7 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
+import com.unciv.workshop.AlienIncursionManager
 
 enum class Proximity : IsPartOfGameInfoSerialization {
     None, // ie no cities
@@ -82,6 +83,9 @@ class Civilization : IsPartOfGameInfoSerialization {
 
     @Transient
     var threatManager = ThreatManager(this)
+
+    @Transient
+    val alienManager = AlienIncursionManager(this)
 
     @Transient
     var diplomacyFunctions = DiplomacyFunctions(this)
