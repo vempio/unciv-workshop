@@ -126,6 +126,11 @@ class MapUnit : IsPartOfGameInfoSerialization {
     @Transient
     lateinit var currentTile: Tile
 
+    /** When true, a land unit sitting on a water tile is rendered as a normal land unit
+     *  instead of getting the embarked (boat) appearance. Purely visual. */
+    @Transient
+    var embarkVisualOverride = false
+
     fun hasTile() = ::currentTile.isInitialized
 
     @Transient
@@ -432,6 +437,7 @@ class MapUnit : IsPartOfGameInfoSerialization {
     fun isEmbarked(): Boolean {
         if (!baseUnit.isLandUnit) return false
         if (cache.canMoveOnWater) return false
+        if (embarkVisualOverride) return false
         return currentTile.isWater
     }
 

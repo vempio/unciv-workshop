@@ -10,6 +10,7 @@ import com.unciv.logic.files.MapSaver
 import com.unciv.logic.map.HexMath
 import com.unciv.logic.map.TileMap
 import com.unciv.logic.map.mapgenerator.MapGenerator
+import com.unciv.logic.map.mapunit.MapUnit
 import com.unciv.logic.map.tile.Tile
 import com.unciv.models.metadata.GameParameters
 import com.unciv.models.metadata.GameSetupInfo
@@ -517,9 +518,32 @@ object GameStarter {
 
     private fun placeStartingUnits(civ: Civilization, startingLocation: Tile, startingUnits: MutableList<String>, ruleset: Ruleset, eraUnitReplacement: String, settlerLikeUnits: Map<String, BaseUnit>) {
         for (unit in startingUnits) {
-            val unitToAdd = getEquivalentUnit(civ, unit, ruleset, eraUnitReplacement, settlerLikeUnits)
-            if (unitToAdd != null) civ.units.placeUnitNearTile(startingLocation.position, unitToAdd)
+            val unitToAdd = getEquivalentUnit(civ, unit, ruleset, eraUnitReplacement, settlerLikeUnits) ?: continue
+            val placedUnit = civ.units.placeUnitNearTile(startingLocation.position, unitToAdd) ?: continue
+            // Give the human player a "head start" right on the coast.
+            if (civ.isHuman()) {
+                val waterTile = findNearbyWaterTile(startingLocation)
+                if (waterTile != null) placeUnitOnWaterTile(placedUnit, waterTile)
+            }
         }
+    }
+
+    /** Finds the closest water tile to [startingLocation], searching outward up to 3 rings. */
+    private fun findNearbyWaterTile(startingLocation: Tile): Tile? {
+        for (radius in 1..3) {
+            val waterTile = startingLocation.getTilesAtDistance(radius).firstOrNull { it.isWater }
+            if (waterTile != null) return waterTile
+        }
+        return null
+    }
+
+    /** Relocates [unit] directly onto [waterTile], bypassing the normal movement validation,
+     *  and suppresses the embarked visual so it still renders as a land unit. */
+    private fun placeUnitOnWaterTile(unit: MapUnit, waterTile: Tile) {
+        unit.removeFromTile()
+        if (unit.isCivilian()) waterTile.civilianUnit = unit else waterTile.militaryUnit = unit
+        unit.moveThroughTile(waterTile)
+        unit.embarkVisualOverride = true
     }
 
     private fun getCandidateLand(
