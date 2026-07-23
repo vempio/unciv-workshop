@@ -195,7 +195,7 @@ if ! ./gradlew :tests:test --tests "*.AlienSightingTrackerTest" --quiet 2>&1; th
     echo ""
     echo "This may mean scaffolding is not installed correctly."
     echo "Make sure you cloned: https://github.com/vempio/unciv-workshop.git"
-    echo "And checked out the tdd-workshop branch."
+    echo "And checked out the tdd-ai-workshop branch."
     echo ""
     exit 1
 fi

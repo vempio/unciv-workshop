@@ -59,7 +59,7 @@ echo.
 echo Step 2: Checking Java version...
 
 REM Get java version output using the selected java command
-for /f "tokens=3" %%i in ('"%JAVA_CMD%" -version 2^>^&1 ^| findstr /i "version"') do (
+for /f "usebackq tokens=3" %%i in (`"%JAVA_CMD%" -version 2^>^&1 ^| findstr /i "version"`) do (
     set JAVA_VERSION_STRING=%%i
     goto :got_version
 )
@@ -230,7 +230,7 @@ if %ERRORLEVEL% neq 0 (
     echo.
     echo This may mean scaffolding is not installed correctly.
     echo Make sure you cloned: https://github.com/vempio/unciv-workshop.git
-    echo And checked out the tdd-workshop branch.
+    echo And checked out the tdd-ai-workshop branch.
     echo.
     exit /b 1
 )

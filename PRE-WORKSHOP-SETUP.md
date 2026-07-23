@@ -71,7 +71,7 @@ Should output: `javac 21.0.2` (or similar)
 ```bash
 git clone https://github.com/vempio/unciv-workshop.git
 cd unciv-workshop
-git checkout tdd-workshop
+git checkout tdd-ai-workshop
 ```
 
 ## Step 4: Run the Verification Script
