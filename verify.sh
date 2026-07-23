@@ -6,6 +6,7 @@
 set -e
 
 REQUIRED_JAVA_VERSION=21
+MAX_JAVA_VERSION=23
 JAVA_CMD=""
 JAVA_HOME_USED=""
 
@@ -55,11 +56,17 @@ echo "  $JAVA_VERSION_OUTPUT"
 # Extract major version number (handles both "21.0.2" and "1.8.0" formats)
 JAVA_VERSION=$("$JAVA_CMD" -version 2>&1 | head -1 | sed -E 's/.*version "([0-9]+).*/\1/')
 
-if [ "$JAVA_VERSION" -ge "$REQUIRED_JAVA_VERSION" ] 2>/dev/null; then
-    echo "  OK: Java $JAVA_VERSION meets requirement (>= $REQUIRED_JAVA_VERSION)"
+if [ "$JAVA_VERSION" -gt "$MAX_JAVA_VERSION" ] 2>/dev/null; then
+    echo ""
+    echo "ERROR: Java version $JAVA_VERSION is too new. This workshop's Gradle 8.11.1 supports Java up to $MAX_JAVA_VERSION."
+    echo "Install JDK $REQUIRED_JAVA_VERSION (Eclipse Temurin) and point JAVA_HOME at it."
+    echo ""
+    exit 1
+elif [ "$JAVA_VERSION" -ge "$REQUIRED_JAVA_VERSION" ] 2>/dev/null; then
+    echo "  OK: Java $JAVA_VERSION is within the supported range ($REQUIRED_JAVA_VERSION-$MAX_JAVA_VERSION)"
 else
     echo ""
-    echo "ERROR: Java version $JAVA_VERSION is too old. Version $REQUIRED_JAVA_VERSION or later is required."
+    echo "ERROR: Java version $JAVA_VERSION is too old. Version $REQUIRED_JAVA_VERSION is required."
     echo ""
 
     # Try to find a suitable JDK and give concrete advice

@@ -4,7 +4,7 @@ Complete these steps **before the workshop**. If you encounter issues, contact t
 
 ## What You Need
 
-1. **Java Development Kit (JDK) 21 or later** — not just Java Runtime (JRE)
+1. **Java Development Kit (JDK) 21** — up to 23; **not** JDK 24 or newer (the workshop build fails on those). Not just a Java Runtime (JRE).
 2. **Git** — to clone the exercise repository
 3. **Your AI coding assistant** — configured and working in your IDE
 
@@ -20,7 +20,7 @@ You need a JDK (Java Development Kit), not just a JRE (Java Runtime Environment)
 | Oracle JDK | https://www.oracle.com/java/technologies/downloads/ | Official Oracle release |
 | Amazon Corretto | https://aws.amazon.com/corretto/ | AWS-maintained, good for corporate environments |
 
-**Choose JDK 21 or later.** Any of the above will work.
+**Choose JDK 21.** The workshop's Gradle (8.11.1) supports Java only up to 23, so do **not** install JDK 24 or newer — the build will fail. Any provider above is fine.
 
 ### Platform-Specific Installation
 
@@ -53,7 +53,7 @@ Open a **new** terminal (to pick up environment changes) and run:
 java -version
 ```
 
-You should see output mentioning version 21 (or higher):
+You should see output mentioning version 21 (21, 22 or 23 are supported):
 ```
 openjdk version "21.0.2" 2024-01-16
 ...
@@ -93,7 +93,7 @@ verify.bat
 
 ### What the Script Checks
 
-1. Java version is 21 or later
+1. Java version is in the supported range (21-23)
 2. JAVA_HOME is set correctly (or suggests how to set it)
 3. Gradle wrapper can start
 4. Upstream Unciv tests pass

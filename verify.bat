@@ -6,6 +6,7 @@ REM Usage: Run from inside the cloned Unciv directory
 setlocal EnableDelayedExpansion
 
 set REQUIRED_JAVA_VERSION=21
+set MAX_JAVA_VERSION=23
 set JAVA_CMD=
 set JAVA_HOME_USED=
 
@@ -78,13 +79,21 @@ if "%JAVA_MAJOR%"=="1" (
 
 echo   Java version: %JAVA_VERSION_STRING% (major: %JAVA_MAJOR%)
 
-if %JAVA_MAJOR% GEQ %REQUIRED_JAVA_VERSION% (
-    echo   OK: Java %JAVA_MAJOR% meets requirement ^(^>= %REQUIRED_JAVA_VERSION%^)
-    goto :check_jdk
-)
+if %JAVA_MAJOR% LSS %REQUIRED_JAVA_VERSION% goto :java_too_old
+if %JAVA_MAJOR% GTR %MAX_JAVA_VERSION% goto :java_too_new
+echo   OK: Java %JAVA_MAJOR% is within the supported range %REQUIRED_JAVA_VERSION%-%MAX_JAVA_VERSION%
+goto :check_jdk
 
+:java_too_new
 echo.
-echo ERROR: Java version %JAVA_MAJOR% is too old. Version %REQUIRED_JAVA_VERSION% or later is required.
+echo ERROR: Java version %JAVA_MAJOR% is too new. This workshop's Gradle 8.11.1 supports Java up to %MAX_JAVA_VERSION%.
+echo Install JDK %REQUIRED_JAVA_VERSION% and point JAVA_HOME at it.
+echo.
+exit /b 1
+
+:java_too_old
+echo.
+echo ERROR: Java version %JAVA_MAJOR% is too old. Version %REQUIRED_JAVA_VERSION% is required.
 echo.
 
 REM Try to detect JDK 21 installations
